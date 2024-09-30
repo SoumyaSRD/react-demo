@@ -10,7 +10,24 @@ const Login = () => {
     const onFormSubmitHandler = (event: any) => {
         event.preventDefault()
         console.log(loginState);
-        authService.login(loginState)
+        loginAPi()
+    }
+
+    const loginAPi = async () => {
+        try {
+            const response = await authService.login(loginState)
+            console.log(response.data);
+            authService.setItem('token', response.data.token)
+            console.log(response.status);
+            console.log(response.statusText);
+            console.log(response.headers);
+            console.log(response.config);
+        } catch (error) {
+            // Handle error
+            authService.setItem('token', `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTk5OWVlMGJjYTcxNzk1MWYxZGUwNSIsImVtYWlsIjoiam9obkBlbWFpbC5jb20iLCJuYW1lIjoiam9obiBkb2UiLCJpYXQiOjE3Mjc2OTAxNzEsImV4cCI6MTcyNzY5Mzc3MX0.4RvWa-nQC7O6-jgDrHP41wUyTzmffigBxXcNWpr0g1g`)
+
+            console.error(error);
+        }
     }
 
     const OnChange = (value: any, name: any) => {

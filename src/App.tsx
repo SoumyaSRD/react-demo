@@ -1,11 +1,12 @@
+import { RouterProvider } from 'react-router-dom';
 import './App.css';
-import Login from './modules/auth/Componests/Login';
+import { router } from './router/router';
 
 function App() {
 
   return (
     <div className="App">
-      <Login></Login>
+      <RouterProvider router={router} />
     </div>
   );
 }
