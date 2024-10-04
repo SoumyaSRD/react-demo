@@ -4,7 +4,7 @@ import { httpClient } from "./HttpClient";
 
 export const authService = {
     getItem: (name: string) => localStorage.getItem(name),
-    delete: (name: string) => localStorage.getItem(name),
+    removeItem: (name: string) => localStorage.removeItem(name),
     setItem: (name: string, data: string) => localStorage.setItem(name, data),
     deleteAll: () => localStorage.clear(),
     isAuthenticated: () => (authService.getItem("token") ? true : false),
