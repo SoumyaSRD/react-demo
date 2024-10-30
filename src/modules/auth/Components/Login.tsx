@@ -6,6 +6,7 @@ const Login = () => {
     const navigate = useNavigate();
     const [loginState, useLoginState] = useState({
         email: "",
+        phone: "",
         password: "",
         rememberMe: false,
     });
@@ -17,8 +18,10 @@ const Login = () => {
     const loginAPi = async () => {
         try {
             const response = await authService.login(loginState);
-            authService.setItem("token", response.data.token);
-            if (response.data.token) {
+            console.log(response);
+
+            if (response.data.data) {
+                authService.setItem("token", response.data.data);
                 navigate("/home");
             }
         } catch (error) {
@@ -36,10 +39,10 @@ const Login = () => {
     };
 
     return (
-        <div>
+        <div className="card">
             <h1>Login</h1>
 
-            <form onSubmit={onFormSubmitHandler}>
+            <form onSubmit={onFormSubmitHandler} >
                 <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
                         Email address
@@ -57,6 +60,24 @@ const Login = () => {
                         We'll never share your email with anyone else.
                     </div>
                 </div>
+
+                {/* <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                        Phone
+                    </label>
+                    <input
+                        type="email"
+                        className="form-control"
+                        id="exampleInputEmail1"
+                        aria-describedby="emailHelp"
+                        name="text"
+                        value={loginState.email}
+                        onChange={(e: any) => OnChange(e.target.value, "email")}
+                    />
+                    <div id="emailHelp" className="form-text">
+                        We'll never share your email with anyone else.
+                    </div>
+                </div> */}
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">
                         Password
