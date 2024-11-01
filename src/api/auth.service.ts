@@ -1,4 +1,8 @@
-/* This code snippet defines an `authService` object in TypeScript that provides various methods related to handling authentication tokens and data storage using the browser's `localStorage`. Here's a breakdown of what each method does: */
+/* 
+
+* This code snippet defines an `authService` object in TypeScript that provides various methods related to handling         authentication tokens and data storage using the browser's `localStorage`. Here's a breakdown of what each method does: 
+
+*/
 
 import { deleteAllCookies, eraseCookie, getCookie, setCookie } from "./cookie.service";
 import { httpClient } from "./HttpClient";

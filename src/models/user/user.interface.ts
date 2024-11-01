@@ -1,8 +1,9 @@
+
 export interface IUser {
-    limit: number;
-    skip: number;
-    total: number;
-    users: IUserDetails[]
+    limit?: number;
+    skip?: number;
+    total?: number;
+    data?: IUserDetails[]
 }
 
 export interface IUserDetails {

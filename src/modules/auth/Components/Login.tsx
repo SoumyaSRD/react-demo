@@ -6,9 +6,9 @@ const Login = () => {
     const navigate = useNavigate();
     const [loginState, useLoginState] = useState({
         email: "",
-        phone: "",
+        // phone: "",
         password: "",
-        rememberMe: false,
+        // rememberMe: false,
     });
     const onFormSubmitHandler = (event: any) => {
         event.preventDefault();
@@ -19,9 +19,11 @@ const Login = () => {
         try {
             const response = await authService.login(loginState);
             console.log(response);
+            let { token, expires } = response.data
+            if (token) {
 
-            if (response.data.data) {
-                authService.setItem("token", response.data.data);
+                authService.setItem("token", token);
+                authService.setItem("expires", expires);
                 navigate("/home");
             }
         } catch (error) {

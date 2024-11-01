@@ -4,6 +4,7 @@ import { IPagination } from "../../../models/extras/pagination.interface";
 import { IUser } from "../../../models/user/user.interface";
 import Header from "../shared/components/Header";
 import Pagination, { InitialPaginationData } from "../shared/components/Pagination";
+import Table from "../shared/components/Table";
 import * as CommonUtil from "../shared/utils/Common.util";
 export enum DataTypes {
     pagination = 'pagination',
@@ -28,10 +29,18 @@ const Home = () => {
                 page: pagination.page, limit: pagination.pageSize
             }
             if (refresh) {
-                let response = await UserService.getUser({ params })
+                let response = await UserService.filterUser(params)
                 setRefresh(false)
-                console.log(response.data)
-                setUser(user)
+                console.log("response", response?.data)
+
+
+                setUser(response?.data)
+                setPagination((pagination: IPagination) => {
+                    return {
+                        ...pagination,
+                        total: response?.data?.total
+                    }
+                })
             }
 
         } catch (error) {
@@ -57,10 +66,22 @@ const Home = () => {
 
             <Header />
             <button onClick={() => setRefresh(true)}>click</button>
-            {/* <Table data={user} /> */}
+            <Table data={{
+                headers: Object.keys(user?.data || {})?.map((res) => {
+                    return {
+                        name: res
+                    }
+                }),
+                body: user?.data
+            }} />
+            {/* <ul>
+                {user?.data?.map((res: any) => <li>
+                    {res?.email}
+                </li>)}
+            </ul> */}
             <Pagination pagination={pagination}
                 onPageChange={handlePageChange}
-                total={user?.total || 0}
+
             />
 
         </div>

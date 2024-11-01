@@ -4,4 +4,5 @@ export interface IPagination {
     limit?: number;
     count?: number,
     diff: number;
+    total?: number;
 }
