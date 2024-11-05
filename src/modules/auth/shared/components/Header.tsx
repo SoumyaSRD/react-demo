@@ -1,12 +1,14 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { authService } from "../../../../api/auth.service";
 
 const Header = () => {
     const navigate = useNavigate();
 
     const handleLogout = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-        localStorage.clear();
+
+        authService.logout(null)
         navigate("/login");
     };
 

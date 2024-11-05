@@ -1,12 +1,13 @@
-
 export interface IUser {
     limit?: number;
     skip?: number;
     total?: number;
-    data?: IUserDetails[]
+    data?: IUserDetails[];
+    headers?: any[];
 }
 
 export interface IUserDetails {
+    name?: string;
     id?: number;
     firstName?: string;
     lastName?: string;

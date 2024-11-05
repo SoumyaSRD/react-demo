@@ -3,93 +3,101 @@ import { UserService } from "../../../api/user.service";
 import { IPagination } from "../../../models/extras/pagination.interface";
 import { IUser } from "../../../models/user/user.interface";
 import Header from "../shared/components/Header";
-import Pagination, { InitialPaginationData } from "../shared/components/Pagination";
+import Pagination, {
+    InitialPaginationData,
+} from "../shared/components/Pagination";
 import Table from "../shared/components/Table";
 import * as CommonUtil from "../shared/utils/Common.util";
 export enum DataTypes {
-    pagination = 'pagination',
-    total = 'total'
+    pagination = "pagination",
+    total = "total",
 }
 const Home = () => {
-    const [user, setUser] = useState<IUser>()
-    const [refresh, setRefresh] = useState(true)
+    const [user, setUser] = useState<IUser>({
+        data: [], // The actual data
+        headers: [] // The table headers
+    });
+    const [refresh, setRefresh] = useState(true);
 
     const [pagination, setPagination] = useState<IPagination>({
-        ...(CommonUtil.Clone(InitialPaginationData)),
-    })
+        ...CommonUtil.Clone(InitialPaginationData),
+    });
 
     useEffect(() => {
-        if (refresh) getUser()
-    }, [refresh, user])
+        if (refresh) getUser();
+    }, [refresh, user]);
 
     const getUser = async () => {
-
         try {
             let params = {
-                page: pagination.page, limit: pagination.pageSize
-            }
+                page: pagination.page,
+                limit: pagination.pageSize,
+            };
             if (refresh) {
-                let response = await UserService.filterUser(params)
-                setRefresh(false)
-                console.log("response", response?.data)
+                let response = await UserService.filterUser(params);
+                setRefresh(false);
+                let { data, total }: any = response?.data;
 
+                setUser({
+                    data,
+                    total,
+                    headers: [
+                        {
+                            viewName: "Name",
+                            fieldName: "name",
+                            isAuth: true
+                        },
+                        {
+                            viewName: "Creation Date",
+                            fieldName: "createdOn",
+                        },
 
-                setUser(response?.data)
+                        {
+                            viewName: "Updation Date",
+                            fieldName: "modifiedOn",
+                        },
+                        {
+                            viewName: "Email",
+                            fieldName: "email",
+                        },
+                    ],
+                });
+
                 setPagination((pagination: IPagination) => {
                     return {
                         ...pagination,
-                        total: response?.data?.total
-                    }
-                })
+                        total: response?.data?.total,
+                    };
+                });
             }
-
-        } catch (error) {
-
-        }
-    }
-
+        } catch (error) { }
+    };
 
     const handlePageChange = (data: IPagination) => {
-        console.log('page', data);
 
         setPagination((pagination) => {
             return {
                 ...pagination,
-                ...data
-            }
-        })
-        setRefresh(true)
-    }
+                ...data,
+            };
+        });
+        setRefresh(true);
+    };
 
-    return <>
-        <div className="container-fluid">
+    return (
+        <>
+            <div className="container-fluid">
+                <Header />
 
-            <Header />
-            <button onClick={() => setRefresh(true)}>click</button>
-            <Table data={{
-                headers: Object.keys(user?.data || {})?.map((res) => {
-                    return {
-                        name: res
-                    }
-                }),
-                body: user?.data
-            }} />
-            {/* <ul>
-                {user?.data?.map((res: any) => <li>
-                    {res?.email}
-                </li>)}
-            </ul> */}
-            <Pagination pagination={pagination}
-                onPageChange={handlePageChange}
+                <Table data={user} />
 
-            />
-
-        </div>
-
-    </>
+                <Pagination pagination={pagination} onPageChange={handlePageChange} />
+            </div>
+        </>
+    );
 };
 
 export default Home;
 export const TableData = {
-    header: []
-}
+    header: [],
+};
