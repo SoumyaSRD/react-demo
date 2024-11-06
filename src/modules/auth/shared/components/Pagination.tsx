@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import './Pagination.css'; // Import the CSS file
 
 export const InitialPaginationData = { total: 5, page: 1, pageSize: 5, diff: 5 };
 
@@ -22,7 +23,7 @@ const Pagination = ({ pagination, onPageChange }: any) => {
     };
 
     return (
-        <div className="d-flex justify-content-between align-items-center">
+        <div className="pagination-container">
             <div className="form-group">
                 <label htmlFor="pageSizeSelect">Records per page:</label>
                 <select id="pageSizeSelect" className="form-control-sm" value={currentPageSize} onChange={handlePageSizeChange}>

@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../../api/auth.service";
+import './Login.css'; // Import the CSS file
 
 const Login = () => {
     const navigate = useNavigate();
     const [loginState, useLoginState] = useState({
         email: "",
-        // phone: "",
         password: "",
-        // rememberMe: false,
     });
+
     const onFormSubmitHandler = (event: any) => {
         event.preventDefault();
         loginAPi();
@@ -19,9 +19,8 @@ const Login = () => {
         try {
             const response = await authService.login(loginState);
             console.log(response);
-            let { token, expires } = response.data
+            let { token, expires } = response.data;
             if (token) {
-
                 authService.setItem("token", token);
                 authService.setItem("expires", expires);
                 navigate("/home");
@@ -41,10 +40,9 @@ const Login = () => {
     };
 
     return (
-        <div className="card">
-            <h1>Login</h1>
-
-            <form onSubmit={onFormSubmitHandler} >
+        <div className="card login-card">
+            <h1 className="login-title">Login</h1>
+            <form onSubmit={onFormSubmitHandler}>
                 <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">
                         Email address
@@ -62,24 +60,6 @@ const Login = () => {
                         We'll never share your email with anyone else.
                     </div>
                 </div>
-
-                {/* <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">
-                        Phone
-                    </label>
-                    <input
-                        type="email"
-                        className="form-control"
-                        id="exampleInputEmail1"
-                        aria-describedby="emailHelp"
-                        name="text"
-                        value={loginState.email}
-                        onChange={(e: any) => OnChange(e.target.value, "email")}
-                    />
-                    <div id="emailHelp" className="form-text">
-                        We'll never share your email with anyone else.
-                    </div>
-                </div> */}
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">
                         Password
@@ -101,7 +81,7 @@ const Login = () => {
                         onChange={(e: any) => OnChange(e.target.checked, "rememberMe")}
                     />
                     <label className="form-check-label" htmlFor="exampleCheck1">
-                        Check me out
+                        Remember me
                     </label>
                 </div>
                 <button type="submit" className="btn btn-primary">
