@@ -22,7 +22,7 @@ export const authService = {
         return getCookie("token") ? true : false;
     },
     login: (data: any) =>
-        httpClient.post(`http://localhost:3005/auth/login`, data, {
+        httpClient.post(`http://localhost:5000/auth/login`, data, {
             credentials: "include",
         }),
     logout: (data: any) => {

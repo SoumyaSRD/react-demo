@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { UserService } from "../../../api/user.service";
 import { IPagination } from "../../../models/extras/pagination.interface";
-import { IUser } from "../../../models/user/user.interface";
+import { IUserDetails } from "../../../models/user/user.interface";
+import CustomModal from "../shared/components/CustomModal";
 import Header from "../shared/components/Header";
 import Pagination, { InitialPaginationData } from "../shared/components/Pagination";
-import Table from "../shared/components/Table";
+import Table, { ITableData } from "../shared/components/Table";
 import * as CommonUtil from "../shared/utils/Common.util";
+import CreateUser from "./CreateUser";
 
 export enum DataTypes {
     pagination = "pagination",
@@ -13,14 +15,29 @@ export enum DataTypes {
 }
 
 const Home = () => {
-    const [user, setUser] = useState<IUser>({
+    const [user, setUser] = useState<ITableData<IUserDetails[]>>({
         data: [], // The actual data
-        headers: [] // The table headers
+        headers: [], // The table headers
+
+        operations: {
+            isEdit: false,
+            isDelete: false
+        }
     });
     const [refresh, setRefresh] = useState(true);
     const [pagination, setPagination] = useState<IPagination>({
         ...CommonUtil.Clone(InitialPaginationData),
     });
+
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [selectedData, setSelectedData] = useState<any>(null);
+
+    const handleshowCreateModal = () => setShowCreateModal(true);
+    const handleCloseModal = (data: any) => {
+
+        setShowCreateModal(false)
+        return setSelectedData(null)
+    };
 
     useEffect(() => {
         if (refresh) getUser();
@@ -39,8 +56,10 @@ const Home = () => {
 
                 setUser({
                     data,
+                    operations: { isEdit: true, isDelete: true },
+                    type: "User",
                     headers: [
-                        { viewName: "Name", fieldName: "name", isAuth: true },
+                        { viewName: "Name", fieldName: "name" },
                         { viewName: "Creation Date", fieldName: "createdOn" },
                         { viewName: "Updation Date", fieldName: "modifiedOn" },
                         { viewName: "Email", fieldName: "email" },
@@ -64,15 +83,32 @@ const Home = () => {
         }));
         setRefresh(true);
     };
+    const onDeleteHandler = (data: any) => {
+        console.log("delete", data);
 
+    }
+    const onEditHandler = () => {
+        console.log("edit");
+
+    }
     return (
-        <div className="container-fluid">
+
+        <div className="glassmorphism">
             <Header />
-            <div className="glassmorphism">
-                <Table data={user} />
-                <Pagination pagination={pagination} onPageChange={handlePageChange} />
-            </div>
+            <div><button className="btn btn-sm btn-success" onClick={handleshowCreateModal}>Create User</button></div>
+            <Table data={user} onDelete={onDeleteHandler} onEdit={onEditHandler} />
+            <Pagination pagination={pagination} onPageChange={handlePageChange} />
+            <CustomModal
+                show={showCreateModal}
+                onHide={(data) => handleCloseModal(data)}
+                title={`Create User`}
+                data={selectedData}
+
+            >
+                <CreateUser onSubmit={(data: any) => console.log(data)}></CreateUser>
+            </CustomModal>
         </div>
+
     );
 };
 

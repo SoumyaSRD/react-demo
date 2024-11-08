@@ -19,7 +19,7 @@ const Login = () => {
         try {
             const response = await authService.login(loginState);
             console.log(response);
-            let { token, expires } = response.data;
+            let { data: token, expires } = response.data;
             if (token) {
                 authService.setItem("token", token);
                 authService.setItem("expires", expires);

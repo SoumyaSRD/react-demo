@@ -1,65 +1,79 @@
 import React, { useState } from "react";
+import CustomModal from "./CustomModal";
+import "./Table.css"; // Importing external CSS for styling
 
 interface Header {
     viewName: string;
     fieldName: string;
 }
 
-interface TableData {
-    [key: string]: any; // for supporting dynamic fields in each row
+interface TableData<T> {
+    [key: string]: T; // for supporting dynamic fields in each row
 }
 
-interface TableProps {
-    data: {
-        data: TableData[]; // The actual data
-        headers: Header[]; // The table headers
+export interface IOperations {
+    isEdit: boolean;
+    isDelete: boolean;
+}
+
+export interface ITableData<T> {
+    data?: TableData<T>[]; // The actual data
+    headers?: Header[]; // The table headers
+    operations?: IOperations;
+    type?: string
+}
+export interface ITableProps<T> {
+    data: ITableData<T>;
+    onEdit: (rowData: TableData<T>) => void; // Callback function for editing
+    onDelete: (rowData: TableData<T>) => void; // Callback function for deleting
+}
+
+const Table: React.FC<ITableProps<any>> = ({ data, onEdit, onDelete }: ITableProps<any>) => {
+    const [sortConfig, setSortConfig] = useState<{ key: string; direction: string } | null>(null);
+    const [searchQuery, setSearchQuery] = useState<string>("");
+
+    const [showModal, setShowModal] = useState(false);
+    const [selectedData, setSelectedData] = useState<any>(null);
+
+    const handleShowModal = () => setShowModal(true);
+    const handleCloseModal = (data: any) => {
+        if (data) {
+            onDelete(data)
+        }
+        setShowModal(false)
+        return setSelectedData(null)
     };
-}
-
-const Table: React.FC<TableProps | any> = ({ data }: TableProps) => {
-    const [sortConfig, setSortConfig] = useState<
-        { key: string; direction: string } | any
-    >(null);
-    const [searchQuery, setSearchQuery] = useState<any>("");
 
     // Helper function to get nested value
     const getNestedValue = (obj: any, path: string): any => {
         return path.split(".").reduce((acc, part) => acc && acc[part], obj);
     };
 
-    // Function to handle sorting
+    // Handle sorting
     const handleSort = (key: string) => {
         let direction = "ascending";
-        if (
-            sortConfig &&
-            sortConfig.key === key &&
-            sortConfig.direction === "ascending"
-        ) {
+        if (sortConfig && sortConfig.key === key && sortConfig.direction === "ascending") {
             direction = "descending";
         }
         setSortConfig({ key, direction });
     };
 
-    // Function to sort data
+    // Sorting the data based on current sort configuration
     const sortedData = React.useMemo(() => {
         if (!sortConfig) return data?.data || [];
-        const sorted = [...(data?.data || [])].sort((a, b) => {
+        return [...(data?.data || [])].sort((a, b) => {
             const aValue = getNestedValue(a, sortConfig.key);
             const bValue = getNestedValue(b, sortConfig.key);
             if (aValue < bValue) return sortConfig.direction === "ascending" ? -1 : 1;
             if (aValue > bValue) return sortConfig.direction === "ascending" ? 1 : -1;
             return 0;
         });
-        return sorted;
     }, [data, sortConfig]);
 
-    // Function to filter data based on search query
+    // Filter the data based on search query
     const filteredData = sortedData.filter((item: any) =>
         data?.headers?.some((header: any) =>
-            getNestedValue(item, header.fieldName)
-                ?.toString()
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase())
+            getNestedValue(item, header.fieldName)?.toString().toLowerCase().includes(searchQuery.toLowerCase())
         )
     );
 
@@ -72,13 +86,13 @@ const Table: React.FC<TableProps | any> = ({ data }: TableProps) => {
                     placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    style={{ width: "250px" }} // Makes search bar smaller
+                    style={{ width: "250px" }} // Custom style for search bar
                 />
             </div>
             <table className="table table-striped table-hover">
                 <thead className="thead-dark">
                     <tr>
-                        {data?.headers?.map((header: any, index: any) => (
+                        {data?.headers?.map((header, index) => (
                             <th
                                 scope="col"
                                 key={`${header.viewName}-${header.fieldName}-${index}`}
@@ -119,20 +133,69 @@ const Table: React.FC<TableProps | any> = ({ data }: TableProps) => {
                                 ) : null}
                             </th>
                         ))}
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredData.map((rowData: any, rowIndex: any) => (
+                    {filteredData.map((rowData, rowIndex) => (
                         <tr key={`row-${rowIndex}`}>
-                            {data?.headers?.map((header: any, colIndex: any) => (
+                            {data?.headers?.map((header, colIndex) => (
                                 <td key={`${header.viewName}-${header.fieldName}-${colIndex}`}>
                                     {getNestedValue(rowData, header?.fieldName)}
                                 </td>
                             ))}
+                            <td>
+                                {data?.operations?.isEdit && (
+                                    <button
+                                        className="btn btn-sm btn-outline-primary edit-btn me-2"
+                                        onClick={() => onEdit(rowData)}
+                                        title="Edit"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="16"
+                                            height="16"
+                                            fill="currentColor"
+                                            className="bi bi-pencil-square"
+                                            viewBox="0 0 16 16"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M12.146 0l3.708 3.708a1 1 0 0 1 0 1.414l-7.15 7.149a1 1 0 0 1-.553.293l-4.056 1.022a1 1 0 0 1-1.215-1.215l1.022-4.056a1 1 0 0 1 .293-.553L12.146 0zM11.207 2.793l-6.32 6.32-1.023 4.026 4.025-1.022 6.321-6.321L11.207 2.793z"
+                                            />
+                                        </svg>
+                                    </button>
+                                )}
+                                {data?.operations?.isDelete && (
+                                    <button
+                                        className="btn btn-sm btn-outline-danger delete-btn"
+                                        onClick={() => {
+                                            setSelectedData(rowData)
+                                            handleShowModal()
+                                        }}
+                                        title="Delete"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                        </svg>
+                                    </button>
+                                )}
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
+            <CustomModal
+                show={showModal}
+                onHide={(data) => handleCloseModal(data)}
+                title={`Delete ${data.type}`}
+                data={selectedData}
+
+            >
+                <p>Are you sure you want to delete this {selectedData?.name} This action cannot be undone.</p>
+            </CustomModal>
         </div>
     );
 };

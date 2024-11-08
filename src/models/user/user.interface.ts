@@ -1,41 +1,26 @@
+import { IOperations } from "../../modules/auth/shared/components/Table";
+
 export interface IUser {
     limit?: number;
     skip?: number;
     total?: number;
     data?: IUserDetails[];
     headers?: any[];
+    operations?: IOperations
 }
 
+
+
 export interface IUserDetails {
+    id?: string;
     name?: string;
-    id?: number;
-    firstName?: string;
-    lastName?: string;
-    maidenName?: string;
-    age?: number;
-    gender?: string;
     email?: string;
-    phone?: string;
-    username?: string;
     password?: string;
-    birthDate?: string;
-    image?: string;
-    bloodGroup?: string;
-    height?: number;
-    weight?: number;
-    eyeColor?: string;
-    hair?: IHair;
-    ip?: string;
-    address?: IAddress;
-    macAddress?: string;
-    university?: string;
-    bank?: Bank;
-    company?: ICompany;
-    ein?: string;
-    ssn?: string;
-    userAgent?: string;
-    crypto?: ICrypto;
-    role?: string;
+    phone?: string;
+    age?: string;
+    address?: string;
+    type?: string;
+    departments?: string;
 }
 
 export interface IHair {
