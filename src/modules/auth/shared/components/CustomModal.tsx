@@ -17,6 +17,7 @@ export const InitialButtonProperties: IButtonProperties = {
 };
 
 interface CustomModalProps {
+    id: string; // Unique ID for each modal
     show: boolean; // Show or hide the modal
     onHide: (data?: any) => void; // Callback when modal is closed
     title: string; // Title of the modal
@@ -27,6 +28,7 @@ interface CustomModalProps {
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({
+    id,
     show,
     onHide,
     title,
@@ -38,7 +40,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
 
     // Effect to handle modal visibility and aria-hidden attribute
     useEffect(() => {
-        const modal = document.getElementById("customModal") as HTMLElement;
+        const modal = document.getElementById(id) as HTMLElement;
         if (modal) {
             if (show) {
                 modal.classList.add("show");
@@ -50,21 +52,21 @@ const CustomModal: React.FC<CustomModalProps> = ({
                 modal.setAttribute("aria-hidden", "true");
             }
         }
-    }, [show]); // Dependency array ensures this runs when `show` changes
+    }, [id, show]); // Dependency array ensures this runs when `show` changes for that particular modal
 
     return (
         <div
-            id="customModal"
-            key={Math.random() * 1000}
+            id={id}
+            key={id} // Ensure each modal gets a unique key
             className={`modal fade ${show ? "show" : ""}`}
             tabIndex={-1}
-            aria-labelledby="customModalLabel"
+            aria-labelledby={`${id}Label`} // Unique aria-labelledby
             aria-hidden={show ? "false" : "true"} // Correctly set aria-hidden to "true" or "false"
         >
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title" id="customModalLabel">
+                        <h5 className="modal-title" id={`${id}Label`}>
                             {title}
                         </h5>
                         <button

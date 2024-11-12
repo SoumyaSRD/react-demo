@@ -191,12 +191,10 @@ const Table: React.FC<ITableProps<any>> = ({ data, onEdit, onDelete }: ITablePro
                 show={showModal}
                 onHide={(data) => handleCloseModal(data)}
                 title={`Delete ${data.type}`}
-                data={selectedData}
-
-            >
+                data={selectedData} id={"Delete " + data.type} >
                 <p>Are you sure you want to delete this {selectedData?.name} This action cannot be undone.</p>
             </CustomModal>
-        </div>
+        </div >
     );
 };
 

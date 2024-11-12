@@ -4,7 +4,9 @@ import { IPagination } from "../../../models/extras/pagination.interface";
 import { IUserDetails } from "../../../models/user/user.interface";
 import CustomModal from "../shared/components/CustomModal";
 import Header from "../shared/components/Header";
-import Pagination, { InitialPaginationData } from "../shared/components/Pagination";
+import Pagination, {
+    InitialPaginationData,
+} from "../shared/components/Pagination";
 import Table, { ITableData } from "../shared/components/Table";
 import * as CommonUtil from "../shared/utils/Common.util";
 import CreateUser from "./CreateUser";
@@ -21,8 +23,8 @@ const Home = () => {
 
         operations: {
             isEdit: false,
-            isDelete: false
-        }
+            isDelete: false,
+        },
     });
     const [refresh, setRefresh] = useState(true);
     const [pagination, setPagination] = useState<IPagination>({
@@ -34,9 +36,8 @@ const Home = () => {
 
     const handleshowCreateModal = () => setShowCreateModal(true);
     const handleCloseModal = (data: any) => {
-
-        setShowCreateModal(false)
-        return setSelectedData(null)
+        setShowCreateModal(false);
+        return setSelectedData(null);
     };
 
     useEffect(() => {
@@ -72,9 +73,7 @@ const Home = () => {
                     total: totalCount,
                 }));
             }
-        } catch (error) {
-
-        }
+        } catch (error) { }
     };
 
     const handlePageChange = (data: IPagination) => {
@@ -84,32 +83,29 @@ const Home = () => {
         }));
         setRefresh(true);
     };
-    const onDeleteHandler = (data: any) => {
-
-
-    }
-    const onEditHandler = () => {
-
-
-    }
+    const onDeleteHandler = (data: any) => { };
+    const onEditHandler = () => { };
     return (
-
         <div className="glassmorphism">
             <Header />
-            <div><button className="btn btn-sm btn-success" onClick={handleshowCreateModal}>Create User</button></div>
+            <div>
+                <button
+                    className="btn btn-sm btn-success"
+                    onClick={() => handleshowCreateModal()}
+                >
+                    Create User
+                </button>
+            </div>
             <Table data={user} onDelete={onDeleteHandler} onEdit={onEditHandler} />
             <Pagination pagination={pagination} onPageChange={handlePageChange} />
             <CustomModal
                 show={showCreateModal}
                 onHide={(data) => handleCloseModal(data)}
                 title={`Create User`}
-                data={selectedData || false}
-
-            >
+                data={selectedData || false} id={"Create User"}       >
                 <CreateUser onSubmit={(data: any) => console.log(data)}></CreateUser>
             </CustomModal>
         </div>
-
     );
 };
 
