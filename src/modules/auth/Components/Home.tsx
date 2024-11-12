@@ -52,7 +52,8 @@ const Home = () => {
             if (refresh) {
                 let response = await UserService.filterUser(params);
                 setRefresh(false);
-                let { data, total }: any = response?.data;
+                console.log(response.data?.data);
+                let { data, totalCount }: any = response?.data?.data;
 
                 setUser({
                     data,
@@ -68,11 +69,11 @@ const Home = () => {
 
                 setPagination((pagination) => ({
                     ...pagination,
-                    total: response?.data?.total,
+                    total: totalCount,
                 }));
             }
         } catch (error) {
-            console.error("Failed to fetch user data", error);
+
         }
     };
 
@@ -84,11 +85,11 @@ const Home = () => {
         setRefresh(true);
     };
     const onDeleteHandler = (data: any) => {
-        console.log("delete", data);
+
 
     }
     const onEditHandler = () => {
-        console.log("edit");
+
 
     }
     return (
@@ -102,7 +103,7 @@ const Home = () => {
                 show={showCreateModal}
                 onHide={(data) => handleCloseModal(data)}
                 title={`Create User`}
-                data={selectedData}
+                data={selectedData || false}
 
             >
                 <CreateUser onSubmit={(data: any) => console.log(data)}></CreateUser>

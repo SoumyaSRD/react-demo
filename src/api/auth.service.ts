@@ -18,7 +18,6 @@ export const authService = {
     setItem: (name: string, data: string) => setCookie(name, data),
     deleteAll: () => deleteAllCookies(),
     isAuthenticated: () => {
-        console.log(">>>>", document.cookie);
         return getCookie("token") ? true : false;
     },
     login: (data: any) =>

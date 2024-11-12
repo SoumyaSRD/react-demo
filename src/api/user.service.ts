@@ -7,7 +7,7 @@ export const UserService = {
         return httpClient.get(`${BaseUrl}users`, config)
     },
     filterUser: (payload: any, config?: any) => {
-        return httpClient.patch(`${BaseUrl}users/filterUser`, payload, config)
+        return httpClient.post(`${BaseUrl}user/filter`, payload, config)
     }
 
 }

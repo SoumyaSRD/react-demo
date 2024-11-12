@@ -35,6 +35,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
     data,
     buttonProperties = InitialButtonProperties, // Default value for buttonProperties
 }: CustomModalProps) => {
+
     // Effect to handle modal visibility and aria-hidden attribute
     useEffect(() => {
         const modal = document.getElementById("customModal") as HTMLElement;
@@ -54,7 +55,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
     return (
         <div
             id="customModal"
-            key={data.type}
+            key={Math.random() * 1000}
             className={`modal fade ${show ? "show" : ""}`}
             tabIndex={-1}
             aria-labelledby="customModalLabel"

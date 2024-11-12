@@ -18,7 +18,6 @@ const Login = () => {
     const loginAPi = async () => {
         try {
             const response = await authService.login(loginState);
-            console.log(response);
             let { data: token, expires } = response.data;
             if (token) {
                 authService.setItem("token", token);
