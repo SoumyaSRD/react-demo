@@ -41,6 +41,7 @@ const Home = () => {
     };
 
     useEffect(() => {
+        UserService.weatherReport()
         if (refresh) getUser();
     }, [refresh, user]);
 
