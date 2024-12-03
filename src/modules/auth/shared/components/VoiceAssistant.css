@@ -1,0 +1,32 @@
+.microphone-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #282c34;
+  color: white;
+}
+
+.microphone-container {
+  display: flex;
+  align-items: center;
+}
+
+.microphone-icon-container {
+  cursor: pointer;
+}
+
+.microphone-status {
+  margin-left: 20px;
+}
+
+.microphone-result-container {
+  margin-top: 20px;
+}
+
+.microphone-result-text {
+  background-color: #444;
+  padding: 10px;
+  border-radius: 5px;
+}
