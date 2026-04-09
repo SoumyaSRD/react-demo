@@ -14,6 +14,8 @@ export interface IUser {
 export interface IUserDetails {
     id?: string;
     name?: string;
+    firstName?: string;
+    lastName?: string;
     username?: string;
     email?: string;
     password?: string;

@@ -122,7 +122,9 @@ const Home = () => {
                     key={selectedData ? selectedData.id : "create"}
                     initialValue={selectedData ? {
                         username: selectedData.username || selectedData.email,
-                        name: (selectedData.firstName || "") + " " + (selectedData.lastName || ""),
+                        firstName: selectedData.firstName || "",
+                        lastName: selectedData.lastName || "",
+                        age: selectedData.age || "",
                         password: "", 
                     } : undefined}
                     onSubmit={(data: any) => {

@@ -2,7 +2,9 @@ import { useState } from "react";
 
 const CreateUser = ({ onSubmit, initialValue = {
     username: "",
-    name: "",
+    firstName: "",
+    lastName: "",
+    age: "",
     password: "",
 } }: any) => {
     let [formData, setFormData] = useState(initialValue);
@@ -35,21 +37,63 @@ const CreateUser = ({ onSubmit, initialValue = {
                     }
                 />
             </div>
+            <div className="row">
+                <div className="col-md-6 mb-4">
+                    <label className="form-label small fw-bold text-muted-custom ms-1">
+                        First Name
+                    </label>
+                    <input
+                        type="text"
+                        name="firstName"
+                        value={formData.firstName}
+                        className="form-control glass-input"
+                        placeholder="John"
+                        onChange={(e) =>
+                            setFormData((data: any) => {
+                                return {
+                                    ...data,
+                                    firstName: e.target.value,
+                                };
+                            })
+                        }
+                    />
+                </div>
+                <div className="col-md-6 mb-4">
+                    <label className="form-label small fw-bold text-muted-custom ms-1">
+                        Last Name
+                    </label>
+                    <input
+                        type="text"
+                        name="lastName"
+                        value={formData.lastName}
+                        className="form-control glass-input"
+                        placeholder="Doe"
+                        onChange={(e) =>
+                            setFormData((data: any) => {
+                                return {
+                                    ...data,
+                                    lastName: e.target.value,
+                                };
+                            })
+                        }
+                    />
+                </div>
+            </div>
             <div className="mb-4">
                 <label className="form-label small fw-bold text-muted-custom ms-1">
-                    Full Name
+                    Age
                 </label>
                 <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
+                    type="number"
+                    name="age"
+                    value={formData.age}
                     className="form-control glass-input"
-                    placeholder="John Doe"
+                    placeholder="25"
                     onChange={(e) =>
                         setFormData((data: any) => {
                             return {
                                 ...data,
-                                name: e.target.value,
+                                age: e.target.value,
                             };
                         })
                     }
