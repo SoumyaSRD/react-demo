@@ -1,0 +1,1 @@
+export const Clone = (data: any) => JSON.parse(JSON.stringify(data))
