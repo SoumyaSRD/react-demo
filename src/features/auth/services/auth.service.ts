@@ -21,7 +21,7 @@ export const authService = {
         return getCookie("token") ? true : false;
     },
     login: (data: any) =>
-        httpClient.post(`${import.meta.env.VITE_API_BASE_URL}auth/login`, data),
+        httpClient.post(`${import.meta.env.VITE_API_BASE_URL || 'https://dummyjson.com/'}auth/login`, data),
     logout: (data: any) => {
         return deleteAllCookies();
         //localStorage.clear()

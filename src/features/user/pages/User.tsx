@@ -128,7 +128,6 @@ const Home = () => {
                         password: "", 
                     } : undefined}
                     onSubmit={(data: any) => {
-                        console.log("Submit:", data);
                         handleCloseModal();
                     }}
                 />
